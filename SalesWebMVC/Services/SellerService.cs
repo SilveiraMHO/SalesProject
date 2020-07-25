@@ -20,5 +20,11 @@ namespace SalesWebMVC.Services
         {
             return _context.Seller.ToList();
         }
+
+        public void CreateSeller(Seller l_seller)
+        {
+            _context.Add(l_seller);
+            _context.SaveChanges();
+        }
     }
 }
