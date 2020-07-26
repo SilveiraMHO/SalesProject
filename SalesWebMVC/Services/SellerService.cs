@@ -23,7 +23,6 @@ namespace SalesWebMVC.Services
 
         public void CreateSeller(Seller l_seller)
         {
-            l_seller.Department = _context.Department.First();
             _context.Add(l_seller);
             _context.SaveChanges();
         }

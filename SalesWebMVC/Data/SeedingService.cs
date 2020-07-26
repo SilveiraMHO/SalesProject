@@ -35,7 +35,7 @@ namespace SalesWebMVC.Data
             Seller s1 = new Seller(1, "Bob Brown", "bob.brown@gmail.com", new DateTime(1990, 12, 03), 2500.0, d1);
             Seller s2 = new Seller(2, "Maria Gutz", "maria.gutz@gmail.com", new DateTime(1985, 7, 21), 3500.0, d2);
             Seller s3 = new Seller(3, "Michael Eggers", "michael.eggers@gmail.com", new DateTime(1979, 1, 9), 3500.0, d3);
-            Seller s4 = new Seller(4, "Erika lins", "erika.lins@gmail.com", new DateTime(1993, 10, 13), 1800.0, d4);
+            Seller s4 = new Seller(4, "Erika Lins", "erika.lins@gmail.com", new DateTime(1993, 10, 13), 1800.0, d4);
             Seller s5 = new Seller(5, "Luke Stanford", "luke.stanford@gmail.com", new DateTime(1984, 6, 20), 2800.0, d2);
 
             SalesRecord sr1 = new SalesRecord(1, new DateTime(2020, 01, 12, 10, 12, 45), 580.0, Models.Enums.SaleStatus.Billed, s2);
