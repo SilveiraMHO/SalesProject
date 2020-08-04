@@ -42,5 +42,30 @@ namespace SalesWebMVC.Controllers
             _sellerService.CreateSeller(l_sellerViewModel.Seller);
             return RedirectToAction(nameof(Index)); //Se o nome do metodo "Index" for mudado, irá gerar um erro
         }
+
+        public IActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound(); //Objeto que instancia uma resposta basica.
+            }
+
+            var l_sellerResult = _sellerService.FindById(id.Value); //como o valor da variavel "id" pode ser nulo, temos que por o "id.Value" (para pegar o valor, caso exista, tem que estar acompanhado do .Value).
+
+            if (l_sellerResult == null)
+            {
+                return NotFound();
+            }
+
+            return View(l_sellerResult);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
+        {
+            _sellerService.Remove(id);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
