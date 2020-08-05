@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Security.AccessControl;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
 using SalesWebMVC.Models;
 using SalesWebMVC.Models.ViewModels;
 using SalesWebMVC.Services;
@@ -48,14 +50,14 @@ namespace SalesWebMVC.Controllers
         {
             if (id == null)
             {
-                return NotFound(); //Objeto que instancia uma resposta basica.
+                return RedirectToAction(nameof(Error), new { message = "Id not provided!" } ); //Chamando tela de erro e passando parametro do método Error(), a partir da criacao de um objeto anônimo.
             }
 
             var l_sellerResult = _sellerService.FindById(id.Value); //como o valor da variavel "id" pode ser nulo, temos que por o "id.Value" (para pegar o valor, caso exista, tem que estar acompanhado do .Value).
 
             if (l_sellerResult == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not found!" } );
             }
 
             return View(l_sellerResult);
@@ -73,14 +75,14 @@ namespace SalesWebMVC.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "id not provided!" } );
             }
 
             var l_sellerResult = _sellerService.FindById(id.Value);
 
             if (l_sellerResult == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "id not found!" } );
             }
 
             return View(l_sellerResult);
@@ -90,13 +92,13 @@ namespace SalesWebMVC.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "id not provided" } );
             }
 
             var l_seller = _sellerService.FindById(id.Value);
             if (l_seller == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "id not found" } );
             }
 
             List<Department> l_departments = _departmentService.FindAll();
@@ -111,7 +113,7 @@ namespace SalesWebMVC.Controllers
         {
             if (id != sellerFormViewModel.Seller.Id)
             {
-                return BadRequest();
+                return RedirectToAction(nameof(Error), new { message = "Id mismatch" } );
             }
 
             try
@@ -119,14 +121,25 @@ namespace SalesWebMVC.Controllers
                 _sellerService.Update(sellerFormViewModel.Seller); //Pode retornar uma exception.
                 return RedirectToAction(nameof(Index));
             }
-            catch (NotFoundException)
+            catch (NotFoundException e) 
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = e.Message } ); //NotFoundException e DbConcurrencyException são excessoes, e excessoes já carregam mensagens.
             }
-            catch (DbConcurrencyException)
+            catch (DbConcurrencyException e)
             {
-                return BadRequest();
+                return RedirectToAction(nameof(Error), new { message = e.Message });
             }
+        }
+
+        public IActionResult Error(string message)
+        {
+            var viewModel = new ErrorViewModel()
+            {
+                Message = message,
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier //Massete do Framework para pegar o ID interno da requisição.
+            };
+
+            return View(viewModel);
         }
     }
 }
