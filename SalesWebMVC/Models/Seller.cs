@@ -12,13 +12,31 @@ namespace SalesWebMVC.Models
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+
+        [Display(Name = "Nome")]
         public string Name { get; set; }
+
+        [Display(Name = "E-mail")]
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
+
+        [Display(Name = "Nascimento")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime BirthDate { get; set; }
+
+        [Display(Name = "Salário Base")]
+        [DisplayFormat(DataFormatString = "{0:F2}")]
         public double BaseSalary { get; set; }
+        
+        [Display(Name = "Departamento")]
         public Department Department { get; set; }
+        
         public int DepartmentId { get; set; }
+        
         public ICollection<SalesRecord> SalesRecords { get; set; } = new List<SalesRecord>();
+
+
 
         public Seller()
         {

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -49,6 +51,19 @@ namespace SalesWebMVC
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, SeedingService seedingService) //O método Seed é chamado dentro deste método.
         {
+            //Configuracao para que o App tenha como Location padrão o Locail do Brasil.
+            var l_ptBR = new CultureInfo("pt-BR");
+            var l_localizationOptions = new RequestLocalizationOptions()
+            {
+                DefaultRequestCulture = new RequestCulture(l_ptBR),
+                SupportedCultures = new List<CultureInfo>() { l_ptBR },
+                SupportedUICultures = new List<CultureInfo>() { l_ptBR }
+            };
+
+            app.UseRequestLocalization(l_localizationOptions);
+            //FIM da configuracao de Location.
+            
+            
             //Se adicionarmos um parametro no método Configure e essa classe estiver registrada no sistema de injeção de dependência da aplicação (que é o nosso caso)
             //automaticamente será resolvida uma instância deste objeto.
             

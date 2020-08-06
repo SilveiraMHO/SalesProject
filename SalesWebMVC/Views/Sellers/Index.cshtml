@@ -4,31 +4,39 @@
     ViewData["Title"] = "Sellers";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class="row">
+    <div class="col-md-6">
+        <hr />
+        <h2>@ViewData["Title"]</h2>
+    </div>
 
-<p>
-    <a asp-action="Create" class="btn btn-default">Create a New Seller</a>
-</p>
+    <div class="col-md-6 text-right">
+        <hr />
+        <a asp-action="Create" class="btn btn-default">Create a New Seller</a>
+    </div>
+</div>
+
+<hr />
 
 <table class="table table-striped table-hover">
     <thead class="text-uppercase">
         <!-- cabeçalho da tabela -->
         <tr>
             <!-- define a linha do cabeçalho da tabela -->
-            <th class="text-center">
+            <th class="text-left">
                 <!-- primeira coluna do cabeçalho vai ser o nome do vendedor -->
                 @Html.DisplayNameFor(model => model.Name)
             </th>
-            <th class="text-center">
+            <th class="text-left">
                 @Html.DisplayNameFor(model => model.Email)
             </th>
             <th class="text-center">
                 @Html.DisplayNameFor(model => model.BirthDate)
             </th>
-            <th class="text-center">
+            <th class="text-right">
                 @Html.DisplayNameFor(model => model.BaseSalary)
             </th>
-            <th></th>
+            <th></th> @*Coluna do CRUD*@
         </tr>
     </thead>
     <tbody>
