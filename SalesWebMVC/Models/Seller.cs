@@ -14,18 +14,26 @@ namespace SalesWebMVC.Models
         public int Id { get; set; }
 
         [Display(Name = "Nome")]
+        [Required(ErrorMessage = "{0} required.")] //Notation para campo obrigatório na View.
+        [StringLength(60, MinimumLength = 3, ErrorMessage = "The {0} size should be between {2} and {1}.")] //Nessa Notation o framework tem uma mensagem padão, mas é possível personalizar, conforme exemplificado.
+        //Na Notation 'StringLength', ainda é possível parametrizar a mensagem de erro. {0} = Nome do atributo. {1} = Primeiro parametro, {2} = Segundo parametro.
         public string Name { get; set; }
 
         [Display(Name = "E-mail")]
+        [Required(ErrorMessage = "{0} required.")]
+        [EmailAddress(ErrorMessage = "Enter a valid email.")] //Validacao para email.
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
         [Display(Name = "Nascimento")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        [Required(ErrorMessage = "{0} required.")]
+        [DataType(DataType.Date)] //Para tirar as horas na View.
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")] //Para formatar data do Brasil.
         public DateTime BirthDate { get; set; }
 
         [Display(Name = "Salário Base")]
+        [Required(ErrorMessage = "{0} required.")]
+        [Range(100.0, 50000.0, ErrorMessage = "The {0} must be from {1} to {2}")]
         [DisplayFormat(DataFormatString = "{0:F2}")]
         public double BaseSalary { get; set; }
         

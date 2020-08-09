@@ -40,9 +40,16 @@ namespace SalesWebMVC.Controllers
         
         [HttpPost] //Notation: Indicando que essa ação será de Post
         [ValidateAntiForgeryToken] //Previque que a aplicação sofra ataques CSRF (quando alguem aproveita uma secao de autenticacao para enviar dados maliciosos).
-        public IActionResult Create(SellerFormViewModel l_sellerViewModel)
+        public IActionResult Create(SellerFormViewModel sellerViewModel)
         {
-            _sellerService.CreateSeller(l_sellerViewModel.Seller);
+            if (!ModelState.IsValid) //Validacao a nivel de controller, caso o JS esteja desativado no browser.
+            {
+                var l_departments = _departmentService.FindAll();
+                var viewModel = new SellerFormViewModel() { Seller = sellerViewModel.Seller, Departments = l_departments };
+
+                return View(viewModel);
+            }
+            _sellerService.CreateSeller(sellerViewModel.Seller);
             return RedirectToAction(nameof(Index)); //Se o nome do metodo "Index" for mudado, irá gerar um erro
         }
 
