@@ -74,8 +74,16 @@ namespace SalesWebMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            await _sellerService.RemoveAsync(id);
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _sellerService.RemoveAsync(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (IntegrityException)
+            {
+                return RedirectToAction(nameof(Error), new { message = "You can not delete this seller because he/she has sales." } );
+            }
+            
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -138,7 +146,7 @@ namespace SalesWebMVC.Controllers
             }
         }
 
-        public IActionResult Error(string message)
+        public IActionResult Error(string message) //Nao existe necessidade de ser um método assincrono, pois nao tem acesso a dados.
         {
             var viewModel = new ErrorViewModel()
             {
