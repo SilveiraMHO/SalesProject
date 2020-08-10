@@ -33,8 +33,8 @@ namespace SalesWebMVC.Controllers
                 return NotFound();
             }
 
-            var department = await _context.Department
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var department = await _context.Department.FirstOrDefaultAsync(m => m.Id == id);
+            
             if (department == null)
             {
                 return NotFound();

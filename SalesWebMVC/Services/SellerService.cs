@@ -19,38 +19,35 @@ namespace SalesWebMVC.Services
             _context = context;
         }
 
-        public List<Seller> FindAllSellers()
+        public async Task<List<Seller>> FindAllSellersAsync()
         {
-            return _context.Seller
-                .OrderBy(x => x.Name)
-                .ToList();
+            return await _context.Seller.OrderBy(x => x.Name).ToListAsync();
         }
 
-        public void CreateSeller(Seller l_seller)
+        public async Task CreateSellerAsync(Seller l_seller)
         {
             _context.Add(l_seller);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public Seller FindById(int id)
+        public async Task<Seller> FindByIdAsync(int id)
         {
-            return _context.Seller
-                .Include(x => x.Department)
-                .FirstOrDefault(x => x.Id == id);
+            return await _context.Seller.Include(x => x.Department).FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public void Remove(int id)
+        public async Task RemoveAsync(int id)
         {
-            var l_sellerRemove = _context.Seller
-                .Find(id);
+            var l_sellerRemove = await _context.Seller.FindAsync(id);
 
             _context.Seller.Remove(l_sellerRemove);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Update(Seller seller)
+        public async Task UpdateAsync(Seller seller)
         {
-            if (!(_context.Seller.Any(x => x.Id == seller.Id))) //Testando se já existe um obj Seller no banco com o mesmo id do obj Seller que chegou no metodo.
+            bool l_hasAny = await _context.Seller.AnyAsync(x => x.Id == seller.Id);
+            
+            if (!l_hasAny) //Testando se já existe um obj Seller no banco com o mesmo id do obj Seller que chegou no metodo.
             {
                 throw new NotFoundException("Id Not Found!");
             }
@@ -60,7 +57,7 @@ namespace SalesWebMVC.Services
             try
             {
                 _context.Update(seller);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException e)
             {
